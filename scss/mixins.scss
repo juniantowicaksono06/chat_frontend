@@ -1,0 +1,11 @@
+@mixin rounded-element {
+    border-radius: 20px !important;
+}
+
+@mixin transparent-element {
+    background-color: rgba(0,0,0,.32) !important;
+}
+
+@mixin btn_padding_sm {
+    padding: 9px 24px;
+}
