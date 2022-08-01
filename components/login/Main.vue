@@ -107,6 +107,9 @@
                         })
                     }
                     this.$store.commit('loading/setLoading', false)
+                    setTimeout(() => {
+                        this.$router.push('/')
+                    }, 3500)
                 })
             },
             validateState(name) {

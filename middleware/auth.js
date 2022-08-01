@@ -10,6 +10,10 @@ export default function ({ redirect, store, app, route }) {
                     return redirect('/login/')
                 }
                 
+                if ((route.path.startsWith('/login') || route.path.startsWith('/register')) && originalText) {
+                    return redirect('/')
+                }
+                
             } catch (error) {
                 return redirect('/login/')
             }
