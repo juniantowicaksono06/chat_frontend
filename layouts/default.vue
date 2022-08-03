@@ -15,7 +15,10 @@ export default {
         loadProfile() {
             this.$axios.$get('/api/v1/profile')
             .then(response => {
-
+                const {statusCode, data} = response
+                if(statusCode == 200) {
+                    this.$store.commit('user/setDataUser', data)
+                }
             })
             .catch(error => {
                 console.log(error)

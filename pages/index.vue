@@ -1,7 +1,8 @@
 <style lang="scss" scoped>
   #chat_wrapper {
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: 2fr 4fr;
+    min-height: 100%;
   }
 </style>
 <template>
