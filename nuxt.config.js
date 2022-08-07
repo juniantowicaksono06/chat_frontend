@@ -53,6 +53,7 @@ export default {
   env: {
     BACKEND_URL: process.env.BACKEND_URL,
     SALT_KEY: process.env.SALT_KEY,
+    WEBSOCKET_URL: process.env.WEBSOCKET_URL
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -61,7 +62,8 @@ export default {
 
   styleResources: {
     scss: [
-      '~scss/mixins.scss'
+      '~scss/mixins.scss',
+      '~scss/colors-var.scss'
     ],
     hoistUseStatements: true
   }

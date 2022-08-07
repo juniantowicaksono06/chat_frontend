@@ -6,7 +6,6 @@ export default function ({ redirect, store, app, route }) {
             try {
                 const bytes  = CryptoJS.AES.decrypt(app.$cookies.get('credentials'), process.env.SALT_KEY);
                 const originalText = bytes.toString(CryptoJS.enc.Utf8);
-                console.log(originalText)
                 if (!originalText) {
                     return redirect('/login/')
                 }

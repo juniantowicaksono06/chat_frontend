@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2'
 import CryptoJS from 'crypto-js'
-export default function ({ $axios, redirect, app }) {
+export default function ({ $axios, redirect, app, $cookies }) {
     // console.log(process.env.BACKEND_URL)
     $axios.onRequest((req) => {
         const credentials = app.$cookies.get('credentials')
@@ -13,15 +13,21 @@ export default function ({ $axios, redirect, app }) {
     $axios.onError((error) => {
         if (error.response) {
             const { data, status } = error.response
-            if (status == 400) {
-                Swal.fire(
-                    {
-                        icon: 'warning',
-                        text: data.message.split("\\").join(''),
-                        target: document.getElementById('swal2_container')
-                    }
-                )
+            let icon = 'warning'
+            if (status == 500) {
+                icon = 'danger'
             }
+            else if (status == 401) {
+                $cookies.remove('credentials')
+                // app.router.push('/')
+            }
+            Swal.fire(
+                {
+                    icon: icon,
+                    text: data.message.split("\\").join(''),
+                    target: document.getElementById('swal2_container'),
+                }
+            )
         }
     })
 }

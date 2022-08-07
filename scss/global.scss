@@ -7,7 +7,7 @@ html, body, #__nuxt, #__layout {
 }
 
 html {
-    overflow: auto;
+    overflow: hidden !important;
 }
 
 html body.swal2-height-auto {

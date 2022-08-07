@@ -2,8 +2,9 @@
     div#sidebar {
         min-height: 100%;
         min-width: 100%;
-        background-color: #111B21;
+        background-color: $dark-background-color-default;
         color: #fff;
+        border-right: 1px solid darkgray;
     }
     .chat-thumbs {
         width: 49px;
@@ -22,7 +23,7 @@
         padding-left: 10px;
     }
     .chat-list-item:hover {
-        background-color: lightgray;
+        background-color: $dark-background-color-default-hover;
         cursor: pointer;
     }
     .chat-text {
