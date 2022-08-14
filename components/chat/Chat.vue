@@ -82,7 +82,25 @@
         </div>
         <div id="chat_main">
             <div id="chat_content">
-                <div class="self-chat-item">
+                <div v-for="(chat, index) in chat_data" :key="`${chat['username']}-${index}`">
+                    <div v-if="chat.from == getUser.username">
+                        <div class="self-chat-item">
+                            <div class="d-inline-block self-chat-item__content">
+                                <span class="self-chat-item__content__text">{{ chat.message }}</span>
+                            </div>
+                        <div class="self-chat-item__clearfix"></div>
+                    </div>                   
+                    </div>
+                    <div v-else>
+                        <div class="oponent-chat-item">
+                            <div class="d-inline-block oponent-chat-item__content">
+                                <span class="oponent-chat-item__content__text">{{ chat.message }}</span>
+                            </div>
+                            <div class="oponent-chat-item__clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="self-chat-item">
                     <div class="d-inline-block self-chat-item__content">
                         <span class="self-chat-item__content__text">Wkwkwk aja 1
 Tes</span>
@@ -101,21 +119,18 @@ Tes</span>
 Tes</span>
                     </div>
                     <div class="oponent-chat-item__clearfix"></div>
-                </div>
+                </div> -->
             </div>
             <div id="chat_input">
                 <b-input-group>
-                    <b-form-input v-model="text_message" placeholder="Type a message..." autofocus></b-form-input>
+                    <b-form-input v-model="text_message" placeholder="Type a message..." autofocus v-on:keypress.enter="sendMessage"></b-form-input>
                     <b-input-group-append>
-                        <b-button class="btn-action">
+                        <b-button class="btn-action" v-on:click="sendMessage">
                             <svg viewBox="0 0 24 24" width="24" height="24" class="btn-action-icon"><path fill="currentColor" d="M1.101 21.757 23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
                         </b-button>
                     </b-input-group-append>
                 </b-input-group>
             </div>
-            <!-- <div id="chat_input">
-                <b-form-input v-model="text_message" placeholder="Type a message" autofocus></b-form-input>
-            </div> -->
         </div>
     </div>
 </template>
@@ -124,24 +139,63 @@ export default {
     data() {
         return {
             text_message: '',
+            chat_data: [
+                {
+                    from: 'dika98',
+                    message: 'Hello There'
+                }
+            ],
             ws: null
+        }
+    },
+    computed: {
+        getUser() {
+            return this.$store.state.user.data_user
         }
     },
     mounted() {
         this.connectWs()
     },
     methods: {
+        sendMessage() {
+            this.ws.send(JSON.stringify({
+                target: 'dika98', // Hardcode
+                message: this.text_message
+            }))
+            this.chat_data.push({
+                from: this.getUser.username,
+                message: this.text_message
+            })
+            this.text_message = ''
+        },
         connectWs() {
             if(this.ws == null) {
                 this.ws = new WebSocket(process.env.WEBSOCKET_URL)
                 this.ws.onopen = (event) => {
+                    console.log(event)
                     // this.ws.send("TES SAJA WKWKWK")
-                    this.ws.send(JSON.stringify({
-                        user_login: this.$store.state.user.data_user.username,
-                    }))
+                    // this.ws.send(JSON.stringify({
+                    //     user_login: this.$store.state.user.data_user.username,
+                    // }))
                 }   
+                this.ws.onmessage = (message) => {
+                    const reply = JSON.parse(message.data)
+                    if(reply) {
+                        if(reply.type == 'message') {
+                            this.chat_data.push(reply)
+                        }
+                    }
+                    // console.log(message)
+                }
             }
-            console.warn("Socket already opened")
+            else {
+                console.warn("Socket already opened")
+            }
+        },
+        send() {
+            this.ws.send(JSON.stringify({
+                'tes': "WKWKWK"
+            }))
         },
         disconnectWs() {
             this.ws = null

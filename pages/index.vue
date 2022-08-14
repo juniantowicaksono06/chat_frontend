@@ -20,6 +20,11 @@ export default {
   components: {
     Sidebar,
     Chat
+  },
+  head() {
+    return {
+      title: "Chating App"
+    }
   }
 }
 </script>
