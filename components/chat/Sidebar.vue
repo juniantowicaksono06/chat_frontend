@@ -30,9 +30,31 @@
         position: relative;
         top: 10px;
     }
+    input {
+        background-color: $dark-input-background;
+        border: 1px solid $dark-input-background;
+        border-radius: 50px;
+        color: #fff;
+        margin-right: 10px;
+    }
+    input:focus {
+        background-color: $dark-input-background;
+        border: 1px solid $dark-input-background;
+        color: #fff;
+        outline: none;
+        outline-style: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
 </style>
 <template>
     <div id="sidebar">
+        <!-- SEARCH CONTACT -->
+        <div class="px-2 py-2">
+            <b-form-group>
+                <b-form-input class="rounded" placeholder="Search..."></b-form-input>
+            </b-form-group>
+        </div>
         <!-- CHAT LISTS -->
         <div v-for="list in chat_list" :key="list._id" class="mb-1 chat-list-item">
             <div class="d-inline">

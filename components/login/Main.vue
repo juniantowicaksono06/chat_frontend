@@ -1,7 +1,4 @@
 <style lang="scss" scoped>
-    .rounded {
-        @include rounded-element
-    }
     #login_section {
         width: 100%;
         height: 100%;

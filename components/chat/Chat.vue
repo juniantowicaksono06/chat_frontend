@@ -34,6 +34,12 @@
         color: #fff;
         margin-right: 10px;
     }
+    div#chat_input input:focus {
+        outline: none;
+        outline-style: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
     div#chat_content {
         color: #fff;
         padding: 10px 20px;

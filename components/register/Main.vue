@@ -1,7 +1,4 @@
 <style lang="scss" scoped>
-    .rounded {
-        @include rounded-element
-    }
     #login_wrapper {
         background-image: url('/img/bg-login.jpg');
         width: 100%;
