@@ -13,7 +13,7 @@ export default {
     },
     methods: {
         loadProfile() {
-            this.$axios.$get('/api/v1/profile')
+            this.$axios.$get('/profile')
             .then(response => {
                 const {statusCode, data} = response
                 if(statusCode == 200) {

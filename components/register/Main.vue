@@ -111,7 +111,7 @@
                         this.username_loading = true
                         const check = await new Promise((resolve, reject) => {
                             timeout = setTimeout(() => {
-                                this.$axios.$get(`/api/auth/check-username/${value}`)
+                                this.$axios.$get(`/check-username/${value}`)
                                 .then((response) => {
                                     resolve(true)
                                 })
@@ -173,7 +173,7 @@
                     email: this.form.email,
                     password: this.form.password
                 }
-                this.$axios.$post('/api/auth/register', data, config)  
+                this.$axios.$post('/auth/register', data, config)  
                 .then((response) => {
                     const {statusCode, data} = response
                     if(statusCode == 201) {

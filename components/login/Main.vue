@@ -82,7 +82,7 @@
                     username: this.form.username,
                     password: this.form.password
                 }
-                this.$axios.$post('/api/auth/login', data, config)  
+                this.$axios.$post('/auth/login', data, config)  
                 .then((response) => {
                     const {statusCode, data} = response
                     if(statusCode == 200) {

@@ -86,7 +86,7 @@
     <div id="chat_container">
         <div id="chat_bg">
         </div>
-        <div id="chat_main">
+        <div id="chat_main" v-if="Object.keys(this.$store.state.chat.chat_target).length > 0">
             <div id="chat_content">
                 <div v-for="(chat, index) in chat_data" :key="`${chat['username']}-${index}`">
                     <div v-if="chat.from == getUser.username">
@@ -146,10 +146,6 @@ export default {
         return {
             text_message: '',
             chat_data: [
-                {
-                    from: 'dika98',
-                    message: 'Hello There'
-                }
             ],
             ws: null
         }
@@ -164,10 +160,15 @@ export default {
     },
     methods: {
         sendMessage() {
-            this.ws.send(JSON.stringify({
-                target: 'dika98', // Hardcode
-                message: this.text_message
-            }))
+            const target = this.$store.state.chat.chat_target
+            if(target) {
+                if(Object.keys(target).length > 0) {
+                    this.ws.send(JSON.stringify({
+                        target: target.username, // Hardcode
+                        message: this.text_message
+                    }))
+                }
+            }
             this.chat_data.push({
                 from: this.getUser.username,
                 message: this.text_message
@@ -178,7 +179,6 @@ export default {
             if(this.ws == null) {
                 this.ws = new WebSocket(process.env.WEBSOCKET_URL)
                 this.ws.onopen = (event) => {
-                    console.log(event)
                     // this.ws.send("TES SAJA WKWKWK")
                     // this.ws.send(JSON.stringify({
                     //     user_login: this.$store.state.user.data_user.username,
