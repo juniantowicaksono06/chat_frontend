@@ -17,3 +17,18 @@ html body.swal2-height-auto {
 .rounded {
     @include rounded-element
 }
+
+.chat-thumbs {
+    width: 49px;
+    height: 49px;
+    border-radius: 100%;
+    display: inline-block !important;
+    position: relative;
+    margin-right: 8px;
+    position: relative;
+    top: -3px;
+    &__xs {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}

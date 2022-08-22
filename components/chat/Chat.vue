@@ -21,7 +21,7 @@
         left: 0;
         display: grid;
         grid-template-columns: auto;
-        grid-template-rows: 9fr 1fr;
+        grid-template-rows: 1fr 9fr 1fr;
     }
     div#chat_input {
         padding: 10px;
@@ -81,12 +81,29 @@
         }
         margin-bottom: 10px;
     }
+    #contact_info {
+        background-color: $dark-panel-background;
+        max-height: 59px;
+        padding: 10px;
+    }
 </style>
 <template>
     <div id="chat_container">
         <div id="chat_bg">
         </div>
-        <div id="chat_main" v-if="Object.keys(this.$store.state.chat.chat_target).length > 0">
+        <div id="chat_main" v-if="Object.keys($store.state.chat.chat_target).length > 0">
+            <div id="contact_info">
+                <div class="d-flex">
+                    <div>
+                        <img :src="$store.state.chat.chat_target.profile_image" alt="" v-if="$store.state.chat.chat_target.profile_image" class="chat-thumbs">
+                        <Avatar :username="$store.state.chat.chat_target.fullname" v-else class="chat-thumbs__xs" />
+                    </div>
+                    <div>
+                        <h5 class="mb-0 text-white pl-2">{{ $store.state.chat.chat_target.fullname }}</h5>
+                        <span class="mb-0 text-white ml-2">{{ this.target_status }}</span>
+                    </div>
+                </div>
+            </div>
             <div id="chat_content">
                 <div v-for="(chat, index) in chat_data" :key="`${chat['username']}-${index}`">
                     <div v-if="chat.from == getUser.username">
@@ -106,26 +123,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="self-chat-item">
-                    <div class="d-inline-block self-chat-item__content">
-                        <span class="self-chat-item__content__text">Wkwkwk aja 1
-Tes</span>
-                    </div>
-                    <div class="self-chat-item__clearfix"></div>
-                </div>
-                <div class="oponent-chat-item">
-                    <div class="d-inline-block oponent-chat-item__content">
-                        <span class="oponent-chat-item__content__text">Wkwkwk aja</span>
-                    </div>
-                    <div class="oponent-chat-item__clearfix"></div>
-                </div>
-                <div class="oponent-chat-item">
-                    <div class="d-inline-block oponent-chat-item__content">
-                        <span class="oponent-chat-item__content__text">Wkwkwk aja 1
-Tes</span>
-                    </div>
-                    <div class="oponent-chat-item__clearfix"></div>
-                </div> -->
             </div>
             <div id="chat_input">
                 <b-input-group>
@@ -141,30 +138,61 @@ Tes</span>
     </div>
 </template>
 <script>
+import Avatar from 'vue-avatar'
 export default {
     data() {
         return {
             text_message: '',
             chat_data: [
             ],
+            target_status: '',
             ws: null
+        }
+    },
+    watch: {
+        '$store.state.chat.chat_target': {
+            handler: function(value) {
+                if(Object.keys(value).length > 0) {
+                    this.wsInstance.send(JSON.stringify({
+                        type: 'target_online',
+                        target: this.getUser.username,
+                        username: value.username
+                    }))
+                }
+            }
         }
     },
     computed: {
         getUser() {
             return this.$store.state.user.data_user
+        },
+        wsInstance() {
+            return this.$wsInstance()
         }
     },
     mounted() {
-        this.connectWs()
+        this.websocketEvent()
     },
     methods: {
+        websocketEvent() {
+            this.$wsEvent('message', (data) => {
+                this.chat_data.push({
+                    from: data.from,
+                    message: data.message
+                })
+            })
+            this.$wsEvent('target_online', (data) => {
+                console.log(data)
+                this.target_status = data['status_online']
+            })
+        },
         sendMessage() {
             const target = this.$store.state.chat.chat_target
             if(target) {
                 if(Object.keys(target).length > 0) {
-                    this.ws.send(JSON.stringify({
-                        target: target.username, // Hardcode
+                    this.wsInstance.send(JSON.stringify({
+                        type: 'message',
+                        target: target.username,
                         message: this.text_message
                     }))
                 }
@@ -175,37 +203,9 @@ export default {
             })
             this.text_message = ''
         },
-        connectWs() {
-            if(this.ws == null) {
-                this.ws = new WebSocket(process.env.WEBSOCKET_URL)
-                this.ws.onopen = (event) => {
-                    // this.ws.send("TES SAJA WKWKWK")
-                    // this.ws.send(JSON.stringify({
-                    //     user_login: this.$store.state.user.data_user.username,
-                    // }))
-                }   
-                this.ws.onmessage = (message) => {
-                    const reply = JSON.parse(message.data)
-                    if(reply) {
-                        if(reply.type == 'message') {
-                            this.chat_data.push(reply)
-                        }
-                    }
-                    // console.log(message)
-                }
-            }
-            else {
-                console.warn("Socket already opened")
-            }
-        },
-        send() {
-            this.ws.send(JSON.stringify({
-                'tes': "WKWKWK"
-            }))
-        },
-        disconnectWs() {
-            this.ws = null
-        }
+    },
+    components: {
+        Avatar
     }
 }
 </script>

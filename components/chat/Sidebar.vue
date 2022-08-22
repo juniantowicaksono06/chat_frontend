@@ -6,16 +6,6 @@
         color: #fff;
         border-right: 1px solid darkgray;
     }
-    .chat-thumbs {
-        width: 49px;
-        height: 49px;
-        border-radius: 100%;
-        display: inline-block !important;
-        position: relative;
-        margin-right: 8px;
-        position: relative;
-        top: -3px;
-    }
     .chat-list-item {
         padding-top: 0;
         padding-bottom: 5px;
